@@ -1,0 +1,20 @@
+{
+  "name": "flight",
+  "version": "0.0.0",
+  "description": "A WebGUI to the 'dump1090-mysql' flight statistics",
+  "main": "flight.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://www.github.com/lspaans/flight.git"
+  },
+  "keywords": [
+    "flight",
+    "dump1090",
+    "rtl-sdr"
+  ],
+  "author": "Léon Spaans",
+  "license": "ISC"
+}
