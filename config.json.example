@@ -1,7 +1,14 @@
 {
+    "html": {
+        "views": "/view",
+        "engine": "jade"
+    },
+    "http": {
+        "port": 9090
+    },
     "mysql": {
         "host": "127.0.0.1",
         "user": "flight",
-        "password": "superc00l"
+        "password": "Superc00l"
     }
 }
