@@ -8,6 +8,28 @@ var mysql = require("mysql");
 var path = require("path");
 
 
+var get_app = function(config) {
+    var app = express();
+
+    app.set("port", config.http.port || 9090);
+    app.set("views", __dirname + config.html.views);
+    app.set("view engine", "jade");
+
+    app.use(morgan("dev"));
+    app.use(bodyParser.urlencoded({extended: true}));
+    app.use(methodOverride());
+    app.use(express.static(path.join(__dirname, "public")));
+
+    app.get("/", function(req, res) {
+        res.render("index", {
+            text: "flight"
+        });
+    });
+
+    return(app);
+};
+
+
 var get_config = function(config) {
     return(JSON.parse(fs.readFileSync("config.json")));
 };
@@ -32,25 +54,11 @@ var get_dbconn = function(config) {
 };
 
 
-var get_app = function(config) {
-    var app = express();
-
-    app.set("port", config.http.port || 9090);
-    app.set("views", __dirname + config.html.views);
-    app.set("view engine", "jade");
-
-    app.use(morgan("dev"));
-    app.use(bodyParser.urlencoded({extended: true}));
-    app.use(methodOverride());
-    app.use(express.static(path.join(__dirname, "public")));
-
-    app.get("/", function(req, res) {
-        res.render("index", {
-            text: "flight"
-        });
+var init_process = function() {
+    process.on('SIGINT', function() {
+        console.log("\nDetected CTRL-C; Exiting process");
+        process.exit();
     });
-
-    return(app);
 };
 
 
@@ -62,6 +70,8 @@ var start_server = function(app) {
 
 
 var main = function() {
+    init_process();
+
     var config = get_config();
     var dbconn = get_dbconn(config);
     var app = get_app(config);
