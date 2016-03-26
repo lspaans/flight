@@ -27,22 +27,26 @@ var log = function(message, code) {
 
 
 var get_app = function(config) {
-    var app = express();
-
-    app.set("port", config.http.port || 9090);
-    app.set("views", __dirname + config.html.views);
-    app.set("view engine", "jade");
-
-    app.use(morgan("dev"));
-    app.use(bodyParser.urlencoded({extended: true}));
-    app.use(methodOverride());
-    app.use(express.static(path.join(__dirname, "public")));
-
-    app.get("/", function(req, res) {
-        res.render("index", {
-            text: "flight"
+    try {
+        var app = express();
+    
+        app.set("port", config.http.port || 9090);
+        app.set("views", __dirname + config.html.views);
+        app.set("view engine", "jade");
+    
+        app.use(morgan("dev"));
+        app.use(bodyParser.urlencoded({extended: true}));
+        app.use(methodOverride());
+        app.use(express.static(path.join(__dirname, "public")));
+    
+        app.get("/", function(req, res) {
+            res.render("index", {
+                text: "flight"
+            });
         });
-    });
+    } catch (e) {
+        exit("Cannot initialize application, reason: '" + e + "'", 255);
+    }
 
     return(app);
 };
