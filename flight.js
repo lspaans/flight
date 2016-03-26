@@ -23,7 +23,7 @@ var get_dbconn = function(config) {
     dbconn.connect(function(err) {
         if (err) {
             console.error("Error connection: " + err.stack);
-            return;
+            process.exit(255);
         }
         console.log("connected as id " + dbconn.threadId);
     });
