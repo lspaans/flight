@@ -35,7 +35,7 @@ var get_dbconn = function(config) {
 var get_app = function(config) {
     var app = express();
 
-    app.set("port", config.http.portT || 9090);
+    app.set("port", config.http.port || 9090);
     app.set("views", __dirname + config.html.views);
     app.set("view engine", "jade");
 
