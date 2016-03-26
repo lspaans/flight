@@ -8,6 +8,24 @@ var mysql = require("mysql");
 var path = require("path");
 
 
+var exit = function(message, code) {
+    log(message, code);
+    process.exit(code);
+};
+
+
+var log = function(message, code) {
+    if (
+        code === undefined ||
+        code == 0
+    ) {
+        console.log(message);
+    } else {
+        console.error(message);
+    }
+};
+
+
 var get_app = function(config) {
     var app = express();
 
@@ -30,8 +48,17 @@ var get_app = function(config) {
 };
 
 
-var get_config = function(config) {
-    return(JSON.parse(fs.readFileSync("config.json")));
+var get_config = function() {
+    try {
+        var config = JSON.parse(fs.readFileSync("config.json"));
+    } catch (e) {
+        exit(
+            "Cannot parse configuration file: '" + "config.json" + "', " + 
+            "reason: '" + e + "'",
+            255
+        );
+    }
+    return(config);
 };
 
 
@@ -45,12 +72,12 @@ var get_dbconn = function(config) {
 
     dbconn.connect(function(err) {
         if (err) {
-            console.error(
-                "Error establishing database connection: '" + err.stack + "'"
+            exit(
+                "Error establishing database connection: '" + err.stack + "'",
+                255
             );
-            process.exit(255);
         }
-        console.log(
+        log(
             "Established database connection: '" + dbconn.threadId + "'"
         );
     });
@@ -61,15 +88,14 @@ var get_dbconn = function(config) {
 
 var init_process = function() {
     process.on('SIGINT', function() {
-        console.log("\nDetected CTRL-C; Exiting process");
-        process.exit();
+        exit("\nDetected CTRL-C; Exiting process");
     });
 };
 
 
 var start_server = function(app) {
     http.createServer(app).listen(app.get("port"), function() {
-        console.log("Express server listening on port: " + app.get("port"));
+        log("Express server listening on port: " + app.get("port"));
     });
 };
 
