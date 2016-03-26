@@ -9,6 +9,7 @@
     "mysql": {
         "host": "127.0.0.1",
         "user": "flight",
-        "password": "Superc00l"
+        "password": "Superc00l",
+        "database": "dump1090"
     }
 }
