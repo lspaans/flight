@@ -40,7 +40,7 @@ var get_app = function(config, dbpool) {
         app.use(express.static(path.join(__dirname, "public")));
 
         app.get("/", function(req, res) {
-            handle_database(req, res, dbpool);
+            render_page(req, res, config, dbpool);
         });
     } catch (e) {
         exit("Cannot initialise application, reason: '" + e + "'", 255);
@@ -50,13 +50,15 @@ var get_app = function(config, dbpool) {
 };
 
 
-var handle_database = function(req, res, dbpool) {
+var render_page = function(req, res, config, dbpool) {
     dbpool.getConnection(function(err, dbconn) {
         if (err) {
             connection.release();
+
             res.render("index", {
                 text: "Cannot establish database connection"
             });
+
             return;
         };
 
@@ -66,18 +68,18 @@ var handle_database = function(req, res, dbpool) {
         );
 
         dbconn.query({
-            sql: "SELECT " +
-                "COUNT(*) AS flights " +
+            sql: "SELECT * " +
                 "FROM `flights` " +
-                "WHERE `last_update` > NOW() - INTERVAL ? MINUTE",
-            timeout: 40000
+                "WHERE `last_update` > NOW() - INTERVAL ? SECOND",
+            timeout: 5000
             },
-            ["1"],
+            [config.flight.period || 60],
             function(err, rows) {
                 dbconn.release();
                 if (!err) {
                     res.render("index", {
-                        text: JSON.stringify(rows)
+                        text: "Flights",
+                        flights: rows
                     });
                 };
         });
@@ -103,6 +105,7 @@ var get_config = function() {
             255
         );
     };
+
     return(config);
 };
 

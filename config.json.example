@@ -1,4 +1,7 @@
 {
+    "flight": {
+        "period": 60
+    },
     "html": {
         "views": "/view",
         "engine": "jade"
@@ -7,6 +10,7 @@
         "port": 9090
     },
     "mysql": {
+        "max_connections": 10,
         "host": "127.0.0.1",
         "user": "flight",
         "password": "Superc00l",
