@@ -22,11 +22,11 @@ var log = function(message, code) {
         console.log(message);
     } else {
         console.error(message);
-    }
+    };
 };
 
 
-var get_app = function(config, dbconn) {
+var get_app = function(config, dbpool) {
     try {
         var app = express();
     
@@ -40,28 +40,53 @@ var get_app = function(config, dbconn) {
         app.use(express.static(path.join(__dirname, "public")));
 
         app.get("/", function(req, res) {
-            dbconn.query({
-                sql: 'SELECT ' +
-                    'COUNT(*) AS flights ' +
-                    'FROM `flights` ' +
-                    'WHERE last_update > NOW() - INTERVAL ? MINUTE;',
-                timeout: 40000,
-                values: ['1']
-            }, function(error, results, fields) {
-                if (error !== null) {
-                    console.log("Error: '" + error + "'");
-                    return;
-                };
-                res.render("index", {
-                    text: JSON.stringify(results)
-                });
-            });
+            handle_database(req, res, dbpool);
         });
     } catch (e) {
         exit("Cannot initialise application, reason: '" + e + "'", 255);
-    }
+    };
 
     return(app);
+};
+
+
+var handle_database = function(req, res, dbpool) {
+    dbpool.getConnection(function(err, dbconn) {
+        if (err) {
+            connection.release();
+            res.render("index", {
+                text: "Cannot establish database connection"
+            });
+            return;
+        };
+
+        console.log(
+            "Established database connection with id: " +
+            dbconn.threadId
+        );
+
+        dbconn.query(
+            "SELECT " +
+            "COUNT(*) AS flights " +
+            "FROM `flights` " +
+            "WHERE `last_update` > NOW() - INTERVAL 1 MINUTE",
+            function(err, rows) {
+                dbconn.release();
+                if (!err) {
+                    res.render("index", {
+                        text: JSON.stringify(rows)
+                    });
+                };
+        });
+
+        dbconn.on("error", function(err) {
+            res.render("index", {
+                text: "Cannot establish database connection"
+            });
+            return;
+        });
+
+    });
 };
 
 
@@ -74,33 +99,21 @@ var get_config = function() {
             "reason: '" + e + "'",
             255
         );
-    }
+    };
     return(config);
 };
 
 
-var get_dbconn = function(config) {
-    var dbconn = mysql.createConnection({
+var get_dbpool = function(config) {
+    var dbpool = mysql.createPool({
+        connectionLimit: config.mysql.max_connections,
         host: config.mysql.host,
         user: config.mysql.user,
         password: config.mysql.password,
         database: config.mysql.database
     });
 
-    dbconn.connect(function(err) {
-        if (err) {
-            exit(
-                "Cannot establish database connection, " +
-                "reason: '" + err.stack + "'",
-                255
-            );
-        }
-        log(
-            "Established database connection: '" + dbconn.threadId + "'"
-        );
-    });
-
-    return(dbconn);
+    return(dbpool);
 };
 
 
@@ -122,8 +135,8 @@ var main = function() {
     init_process();
 
     var config = get_config();
-    var dbconn = get_dbconn(config);
-    var app = get_app(config, dbconn);
+    var dbpool = get_dbpool(config);
+    var app = get_app(config, dbpool);
 
     start_server(app);
 };
@@ -131,4 +144,4 @@ var main = function() {
 
 if (require.main === module) {
     main();
-}
+};
