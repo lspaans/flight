@@ -65,11 +65,14 @@ var handle_database = function(req, res, dbpool) {
             dbconn.threadId
         );
 
-        dbconn.query(
-            "SELECT " +
-            "COUNT(*) AS flights " +
-            "FROM `flights` " +
-            "WHERE `last_update` > NOW() - INTERVAL 1 MINUTE",
+        dbconn.query({
+            sql: "SELECT " +
+                "COUNT(*) AS flights " +
+                "FROM `flights` " +
+                "WHERE `last_update` > NOW() - INTERVAL ? MINUTE",
+            timeout: 40000
+            },
+            ["1"],
             function(err, rows) {
                 dbconn.release();
                 if (!err) {
