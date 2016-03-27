@@ -55,7 +55,7 @@ var render_page = function(req, res, config, dbpool) {
         if (err) {
             connection.release();
 
-            res.render("index", {
+            res.render("flight", {
                 text: "Cannot establish database connection"
             });
 
@@ -68,16 +68,27 @@ var render_page = function(req, res, config, dbpool) {
         );
 
         dbconn.query({
-            sql: "SELECT * " +
-                "FROM `flights` " +
-                "WHERE `last_update` > NOW() - INTERVAL ? SECOND",
+            sql: "SELECT " +
+                    "fl.flight AS flight, " +
+                    "al.airline AS airline_full, " +
+                    "al.country AS country, " +
+                    "fl.squawk AS squawk, " +
+                    "fl.alt AS altitude, " +
+                    "fl.lat AS latitude, " +
+                    "fl.lon AS longitude, " +
+                    "fl.heading AS heading, " +
+                    "fl.speed AS speed, " +
+                    "fl.last_update AS last_update " +
+                "FROM flights fl " +
+                "JOIN airlines al ON al.icao = fl.airline " +
+                "WHERE last_update > NOW() - INTERVAL ? SECOND",
             timeout: 5000
             },
             [config.flight.period || 60],
             function(err, rows) {
                 dbconn.release();
                 if (!err) {
-                    res.render("index", {
+                    res.render("flight", {
                         text: "Flights",
                         flights: rows
                     });
@@ -85,7 +96,7 @@ var render_page = function(req, res, config, dbpool) {
         });
 
         dbconn.on("error", function(err) {
-            res.render("index", {
+            res.render("flight", {
                 text: "Cannot establish database connection"
             });
             return;
