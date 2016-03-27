@@ -26,7 +26,7 @@ var log = function(message, code) {
 };
 
 
-var get_app = function(config) {
+var get_app = function(config, dbconn) {
     try {
         var app = express();
     
@@ -38,14 +38,27 @@ var get_app = function(config) {
         app.use(bodyParser.urlencoded({extended: true}));
         app.use(methodOverride());
         app.use(express.static(path.join(__dirname, "public")));
-    
+
         app.get("/", function(req, res) {
-            res.render("index", {
-                text: "flight"
+            dbconn.query({
+                sql: 'SELECT ' +
+                    'COUNT(*) AS flights ' +
+                    'FROM `flights` ' +
+                    'WHERE last_update > NOW() - INTERVAL ? MINUTE;',
+                timeout: 40000,
+                values: ['1']
+            }, function(error, results, fields) {
+                if (error !== null) {
+                    console.log("Error: '" + error + "'");
+                    return;
+                };
+                res.render("index", {
+                    text: JSON.stringify(results)
+                });
             });
         });
     } catch (e) {
-        exit("Cannot initialize application, reason: '" + e + "'", 255);
+        exit("Cannot initialise application, reason: '" + e + "'", 255);
     }
 
     return(app);
@@ -77,7 +90,8 @@ var get_dbconn = function(config) {
     dbconn.connect(function(err) {
         if (err) {
             exit(
-                "Error establishing database connection: '" + err.stack + "'",
+                "Cannot establish database connection, " +
+                "reason: '" + err.stack + "'",
                 255
             );
         }
@@ -109,7 +123,7 @@ var main = function() {
 
     var config = get_config();
     var dbconn = get_dbconn(config);
-    var app = get_app(config);
+    var app = get_app(config, dbconn);
 
     start_server(app);
 };
