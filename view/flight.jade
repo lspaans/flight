@@ -1,35 +1,18 @@
 doctype html
 html
   head
-    title flight
+    title Flight
     link(rel="stylesheet", href="/stylesheet/index.css")
     script(src="/script/index.js")
   body
-      span= text
-      table
-          thead
-              tr
-                  th= 'flight'
-                  th= 'airline_full'
-                  th= 'country'
-                  th= 'squawk'
-                  th= 'altitude'
-                  th= 'latitude'
-                  th= 'longitude'
-                  th= 'heading'
-                  th= 'speed'
-                  th= 'last_update'
-          tbody
-              for flight in flights
-                  tr
-                      td= flight.flight
-                      td= flight.airline_short
-                      td= flight.airline_full
-                      td= flight.country
-                      td= flight.squawk
-                      td= flight.altitude
-                      td= flight.latitude
-                      td= flight.longitude
-                      td= flight.heading
-                      td= flight.speed
-                      td= flight.last_update
+    span= 'Flight'
+    table(class="flight")
+      thead
+        tr
+          for value in header
+            th= value
+      tbody
+        for flight in flights
+          tr
+            each val, index in flight
+              td= val

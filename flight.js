@@ -69,16 +69,16 @@ var render_page = function(req, res, config, dbpool) {
 
         dbconn.query({
             sql: "SELECT " +
-                    "fl.flight AS flight, " +
-                    "al.airline AS airline_full, " +
-                    "al.country AS country, " +
-                    "fl.squawk AS squawk, " +
-                    "fl.alt AS altitude, " +
-                    "fl.lat AS latitude, " +
-                    "fl.lon AS longitude, " +
-                    "fl.heading AS heading, " +
-                    "fl.speed AS speed, " +
-                    "fl.last_update AS last_update " +
+                    "fl.flight, " +
+                    "al.airline, " +
+                    "al.country, " +
+                    "fl.squawk, " +
+                    "fl.alt, " +
+                    "fl.lat, " +
+                    "fl.lon, " +
+                    "fl.heading, " +
+                    "fl.speed, " +
+                    "fl.last_update " +
                 "FROM flights fl " +
                 "JOIN airlines al ON al.icao = fl.airline " +
                 "WHERE last_update > NOW() - INTERVAL ? SECOND",
@@ -89,8 +89,19 @@ var render_page = function(req, res, config, dbpool) {
                 dbconn.release();
                 if (!err) {
                     res.render("flight", {
-                        text: "Flights",
-                        flights: rows
+                        flights: rows,
+                        header: [
+                            "Call sign",
+                            "Airline",
+                            "Country",
+                            "Squawk",
+                            "Altitude",
+                            "Latitude",
+                            "Longitude",
+                            "Heading",
+                            "Speed",
+                            "Last seen"
+                        ]
                     });
                 };
         });
