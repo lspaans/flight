@@ -4,6 +4,7 @@
   "description": "A WebGUI to the 'dump1090-mysql' flight statistics",
   "main": "flight.js",
   "scripts": {
+    "start": "node flight.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
