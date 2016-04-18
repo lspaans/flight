@@ -1,4 +1,2 @@
-build-container.sh
 config.json
 node_modules/
-start-container.sh
