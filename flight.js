@@ -29,7 +29,8 @@ var log = function(message, code) {
 var get_app = function(config, dbpool) {
     try {
         var app = express();
-    
+
+        app.set("address", config.http.address || "127.0.0.1");    
         app.set("port", config.http.port || 9090);
         app.set("views", __dirname + config.html.views);
         app.set("view engine", "jade");
@@ -153,9 +154,16 @@ var init_process = function() {
 
 
 var start_server = function(app) {
-    http.createServer(app).listen(app.get("port"), function() {
-        log("Express server listening on port: " + app.get("port"));
-    });
+    http.createServer(app).listen(
+        app.get("port"),
+        app.get("address"),
+        function() {
+            log(
+                "Express server listening on socket: " +
+                app.get("address") + ":" + app.get("port")
+            );
+        }
+    );
 };
 
 
