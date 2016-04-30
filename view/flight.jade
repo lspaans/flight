@@ -5,14 +5,14 @@ html
     link(rel="stylesheet", href="/stylesheet/index.css")
     script(src="/script/index.js")
   body
-    span= 'Flight'
-    table(class="flight")
+    span(class="title")= 'Flight'
+    table(class="statTable")
       thead
-        tr
+        tr(class="statHeaderRow")
           for value in header
-            th= value
+            th(class="statCell")= value
       tbody
         for flight in flights
-          tr
+          tr(class="statRow")
             each val, index in flight
-              td= val
+              td(class="statCell")= val
