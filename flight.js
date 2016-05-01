@@ -79,7 +79,7 @@ var render_page = function(req, res, config, dbpool) {
                     "fl.lon, " +
                     "fl.heading, " +
                     "fl.speed, " +
-                    "fl.last_update " +
+                    "DATE_FORMAT(fl.last_update, '%Y-%m-%d %T') " +
                 "FROM flights fl " +
                 "JOIN airlines al ON al.icao = fl.airline " +
                 "WHERE last_update > NOW() - INTERVAL ? SECOND",
