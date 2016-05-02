@@ -1,16 +1,27 @@
 body {
+    background-color: #f0f0f0;
     font-family: "Arial";
     font-size: 12pt;
-    margin: 40pt;
+}
+
+.screen {
+    background-color: #ffffff;
+    -moz-border-radius: 15px;
+    border: 1px solid #a0a0a0;
+    border-radius: 15px;
+    margin: 40px;
+    padding: 20px;
+    width: 1200px;
 }
 
 .title {
     font-size: 20pt;
     font-weight: bold;
+    margin-bottom: 20px;
+    margin-top: 20px;
 }
 
 .statCell {
-    border: none;
     padding-bottom: 2px;
     padding-left: 5px;
     padding-right: 5px;
@@ -41,9 +52,10 @@ body {
 }
 
 .statTable {
-    border: 1px solid #000000;
+    border: none;
     border-collapse: collapse;
     color: #000000;
+    margin-top: 20px;
     text-align: left;
-    width: 1000px;
+    width: 100%;
 }
