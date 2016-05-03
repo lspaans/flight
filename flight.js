@@ -14,8 +14,8 @@ var SQL_CURRENT_FLIGHTS = "SELECT " +
       "al.country, " +
       "COALESCE(fl.squawk), " +
       "COALESCE(fl.alt), " +
-      "COALESCE(fl.lat), " +
-      "COALESCE(fl.lon), " +
+      "FORMAT(COALESCE(fl.lat), 5), " +
+      "FORMAT(COALESCE(fl.lon), 5), " +
       "COALESCE(fl.heading), " +
       "COALESCE(fl.speed), " +
   "DATE_FORMAT(fl.last_update, '%Y-%m-%d %T') " +
@@ -112,7 +112,7 @@ var render_main = function(req, res, config, dbpool) {
                         flights: rows,
                         header: STAT_HEADER,
                         status: strftime(
-                            "Refreshed at: %Y-%m-%d %H:%M:%S", new Date()
+                            "Refreshed at '%Y-%m-%d %H:%M:%S'", new Date()
                         )
                     });
                 };
