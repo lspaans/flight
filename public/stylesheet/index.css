@@ -40,7 +40,7 @@ body {
     border-width: 0px;
     font-family: "Courier New";
     font-size: 12px;
-    text-align: left;
+    text-align: right;
 }
 
 .statRow:nth-child(even) {
