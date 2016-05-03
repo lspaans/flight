@@ -96,11 +96,11 @@ var render_main = function(req, res, config, dbpool) {
                             "Airline",
                             "Country",
                             "Squawk",
-                            "Altitude",
-                            "Latitude",
-                            "Longitude",
+                            "Alt. [ft]",
+                            "Lat. [ft]",
+                            "Long. [ft]",
                             "Heading",
-                            "Speed",
+                            "Speed [kt/s]",
                             "Last seen"
                         ]
                     });
