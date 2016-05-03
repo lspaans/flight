@@ -41,7 +41,7 @@ var get_app = function(config, dbpool) {
         app.use(express.static(path.join(__dirname, "public")));
 
         app.get("/", function(req, res) {
-            render_page(req, res, config, dbpool);
+            render_main(req, res, config, dbpool);
         });
     } catch (e) {
         exit("Cannot initialise application, reason: '" + e + "'", 255);
@@ -51,7 +51,7 @@ var get_app = function(config, dbpool) {
 };
 
 
-var render_page = function(req, res, config, dbpool) {
+var render_main = function(req, res, config, dbpool) {
     dbpool.getConnection(function(err, dbconn) {
         if (err) {
             connection.release();
@@ -113,7 +113,6 @@ var render_page = function(req, res, config, dbpool) {
             });
             return;
         });
-
     });
 };
 
