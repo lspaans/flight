@@ -11,16 +11,17 @@ var SQL_CURRENT_FLIGHTS = "SELECT " +
       "fl.flight, " +
       "al.airline, " +
       "al.country, " +
-      "fl.squawk, " +
-      "fl.alt, " +
-      "fl.lat, " +
-      "fl.lon, " +
-      "fl.heading, " +
-      "fl.speed, " +
+      "COALESCE(fl.squawk), " +
+      "COALESCE(fl.alt), " +
+      "COALESCE(fl.lat), " +
+      "COALESCE(fl.lon), " +
+      "COALESCE(fl.heading), " +
+      "COALESCE(fl.speed), " +
   "DATE_FORMAT(fl.last_update, '%Y-%m-%d %T') " +
   "FROM flights fl " +
   "JOIN airlines al ON al.icao = fl.airline " +
-  "WHERE last_update > NOW() - INTERVAL ? SECOND";
+  "WHERE last_update > NOW() - INTERVAL ? SECOND " + 
+  "GROUP BY fl.flight";
 
 var STAT_HEADER = [
     "Call sign",
