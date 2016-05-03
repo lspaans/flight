@@ -6,6 +6,7 @@ var methodOverride = require("method-override");
 var morgan = require("morgan");
 var mysql = require("mysql");
 var path = require("path");
+var strftime = require("strftime");
 
 var SQL_CURRENT_FLIGHTS = "SELECT " +
       "fl.flight, " +
@@ -86,7 +87,9 @@ var render_main = function(req, res, config, dbpool) {
             connection.release();
 
             res.render("flight", {
-                text: "Cannot establish database connection"
+                flights: [],
+                header: STAT_HEADER,
+                status: "Cannot establish database connection"
             });
 
             return;
@@ -107,14 +110,19 @@ var render_main = function(req, res, config, dbpool) {
                 if (!err) {
                     res.render("flight", {
                         flights: rows,
-                        header: STAT_HEADER
+                        header: STAT_HEADER,
+                        status: strftime(
+                            "Refreshed at: %Y-%m-%d %H:%M:%S", new Date()
+                        )
                     });
                 };
         });
 
         dbconn.on("error", function(err) {
             res.render("flight", {
-                text: "Cannot establish database connection"
+                flights: [],
+                header: STAT_HEADER,
+                status: "Cannot establish database connection"
             });
             return;
         });

@@ -25,6 +25,7 @@
     "jade": "1.11.0",
     "method-override": "2.3.5",
     "morgan": "1.7.0",
-    "mysql": "2.10.2"
+    "mysql": "2.10.2",
+    "strftime": "0.9.2"
   }
 }
