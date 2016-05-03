@@ -7,6 +7,34 @@ var morgan = require("morgan");
 var mysql = require("mysql");
 var path = require("path");
 
+var SQL_CURRENT_FLIGHTS = "SELECT " +
+      "fl.flight, " +
+      "al.airline, " +
+      "al.country, " +
+      "fl.squawk, " +
+      "fl.alt, " +
+      "fl.lat, " +
+      "fl.lon, " +
+      "fl.heading, " +
+      "fl.speed, " +
+  "DATE_FORMAT(fl.last_update, '%Y-%m-%d %T') " +
+  "FROM flights fl " +
+  "JOIN airlines al ON al.icao = fl.airline " +
+  "WHERE last_update > NOW() - INTERVAL ? SECOND";
+
+var STAT_HEADER = [
+    "Call sign",
+    "Airline",
+    "Country",
+    "Squawk",
+    "Alt. [ft]",
+    "Lat. [ft]",
+    "Long. [ft]",
+    "Heading",
+    "Speed [kt/s]",
+    "Last seen"
+];
+
 
 var exit = function(message, code) {
     log(message, code);
@@ -69,21 +97,8 @@ var render_main = function(req, res, config, dbpool) {
         );
 
         dbconn.query({
-            sql: "SELECT " +
-                    "fl.flight, " +
-                    "al.airline, " +
-                    "al.country, " +
-                    "fl.squawk, " +
-                    "fl.alt, " +
-                    "fl.lat, " +
-                    "fl.lon, " +
-                    "fl.heading, " +
-                    "fl.speed, " +
-                    "DATE_FORMAT(fl.last_update, '%Y-%m-%d %T') " +
-                "FROM flights fl " +
-                "JOIN airlines al ON al.icao = fl.airline " +
-                "WHERE last_update > NOW() - INTERVAL ? SECOND",
-            timeout: 5000
+                sql: SQL_CURRENT_FLIGHTS,
+                timeout: 5000
             },
             [config.flight.period || 60],
             function(err, rows) {
@@ -91,18 +106,7 @@ var render_main = function(req, res, config, dbpool) {
                 if (!err) {
                     res.render("flight", {
                         flights: rows,
-                        header: [
-                            "Call sign",
-                            "Airline",
-                            "Country",
-                            "Squawk",
-                            "Alt. [ft]",
-                            "Lat. [ft]",
-                            "Long. [ft]",
-                            "Heading",
-                            "Speed [kt/s]",
-                            "Last seen"
-                        ]
+                        header: STAT_HEADER
                     });
                 };
         });
