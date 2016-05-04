@@ -15,7 +15,7 @@ var SQL_CURRENT_FLIGHTS = "SELECT " +
       "LPAD(HEX(fl.squawk), 4, '0'), " +
       "IF(" +
           "fl.alt>100 AND fl.alt<1000000 AND fl.speed>0," + 
-          "CONCAT(COALESCE(fl.alt), 'ft.')," +
+          "CONCAT(FORMAT(COALESCE(fl.alt), 0), 'ft.')," +
           "'n/a'" + 
       "), " +
       "CONCAT(FORMAT(COALESCE(fl.lat), 5), '˚'), " +
