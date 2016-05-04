@@ -33,7 +33,7 @@ var STAT_HEADER = [
     "Lat. [ft]",
     "Long. [ft]",
     "Heading [˚]",
-    "Speed [kt/s]",
+    "Speed [kt]",
     "Last seen"
 ];
 
