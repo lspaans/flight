@@ -13,11 +13,11 @@ var SQL_CURRENT_FLIGHTS = "SELECT " +
       "al.airline, " +
       "al.country, " +
       "LPAD(HEX(fl.squawk), 4, '0'), " +
-      "CONCAT(COALESCE(fl.alt), ' ft.'), " +
+      "CONCAT(COALESCE(fl.alt), 'ft.'), " +
       "CONCAT(FORMAT(COALESCE(fl.lat), 5), '˚'), " +
       "CONCAT(FORMAT(COALESCE(fl.lon), 5), '˚')," +
       "CONCAT(COALESCE(fl.heading), '˚'), " +
-      "CONCAT(COALESCE(fl.speed), ' kt.'), " +
+      "CONCAT(COALESCE(fl.speed), 'kt.'), " +
       "DATE_FORMAT(fl.last_update, '%Y-%m-%d %T') " +
   "FROM flights fl " +
   "JOIN airlines al ON al.icao = fl.airline " +
