@@ -12,7 +12,7 @@ var SQL_CURRENT_FLIGHTS = "SELECT " +
       "fl.flight, " +
       "al.airline, " +
       "al.country, " +
-      "fl.squawk, " +
+      "LPAD(HEX(fl.squawk), 4, '0'), " +
       "COALESCE(fl.alt), " +
       "FORMAT(COALESCE(fl.lat), 5), " +
       "FORMAT(COALESCE(fl.lon), 5), " +
