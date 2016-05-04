@@ -30,8 +30,8 @@ var STAT_HEADER = [
     "Country",
     "Squawk",
     "Alt. [ft]",
-    "Lat. [ft]",
-    "Long. [ft]",
+    "Lat [˚]",
+    "Long. [˚]",
     "Heading [˚]",
     "Speed [kt]",
     "Last seen"
