@@ -13,12 +13,12 @@ var SQL_CURRENT_FLIGHTS = "SELECT " +
       "al.airline, " +
       "al.country, " +
       "LPAD(HEX(fl.squawk), 4, '0'), " +
-      "COALESCE(fl.alt), " +
-      "FORMAT(COALESCE(fl.lat), 5), " +
-      "FORMAT(COALESCE(fl.lon), 5), " +
-      "COALESCE(fl.heading), " +
-      "COALESCE(fl.speed), " +
-  "DATE_FORMAT(fl.last_update, '%Y-%m-%d %T') " +
+      "CONCAT(COALESCE(fl.alt), ' ft.'), " +
+      "CONCAT(FORMAT(COALESCE(fl.lat), 5), '˚'), " +
+      "CONCAT(FORMAT(COALESCE(fl.lon), 5), '˚')," +
+      "CONCAT(COALESCE(fl.heading), '˚'), " +
+      "CONCAT(COALESCE(fl.speed), ' kt.'), " +
+      "DATE_FORMAT(fl.last_update, '%Y-%m-%d %T') " +
   "FROM flights fl " +
   "JOIN airlines al ON al.icao = fl.airline " +
   "WHERE last_update > NOW() - INTERVAL ? SECOND " + 
@@ -29,11 +29,11 @@ var STAT_HEADER = [
     "Airline",
     "Country",
     "Squawk",
-    "Alt. [ft]",
-    "Lat [˚]",
-    "Long. [˚]",
-    "Heading [˚]",
-    "Speed [kt]",
+    "Alt.",
+    "Lat",
+    "Long.",
+    "Heading",
+    "Speed",
     "Last seen"
 ];
 
