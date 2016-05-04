@@ -1,7 +1,7 @@
 body {
     background-color: #f0f0f0;
     font-family: "Arial";
-    font-size: 12pt;
+    font-size: 10pt;
 }
 
 .screen {
@@ -11,14 +11,14 @@ body {
     border-radius: 15px;
     margin: 40px;
     padding: 20px;
-    width: 1200px;
+    width: 1000px;
 }
 
 .title {
     border-color: #addfff;
     border-style: solid;
     border-width: 0px 0px 3px 0px;
-    font-size: 20pt;
+    font-size: 16pt;
     font-weight: bold;
     margin: 20px 0px 20px 0px;
     padding: 5px;
@@ -31,7 +31,7 @@ body {
 .statHeaderRow {
     background-color: #000000;
     color: #ffffff;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
     text-align: center;
 }
@@ -39,7 +39,7 @@ body {
 .statRow {
     border-width: 0px;
     font-family: "Courier New";
-    font-size: 12px;
+    font-size: 10px;
     text-align: right;
 }
 
@@ -62,12 +62,12 @@ body {
 
 .statusName {
     color: #000000;
-    font-size: 12px;
+    font-size: 10px;
     font-weight: bold;
 }
 .statusValue {
     color: #606060;
     font-family: "Courier New";
-    font-size: 12px;
+    font-size: 10px;
     font-weight: bold;
 }

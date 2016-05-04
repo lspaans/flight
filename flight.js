@@ -25,16 +25,16 @@ var SQL_CURRENT_FLIGHTS = "SELECT " +
   "GROUP BY fl.flight";
 
 var STAT_HEADER = [
-    "Call sign",
-    "Airline",
-    "Country",
-    "Squawk",
-    "Altitude",
-    "Latitude",
-    "Longitude",
-    "Heading",
-    "Speed",
-    "Last seen"
+    "call sign",
+    "airline",
+    "country",
+    "squawk",
+    "altitude",
+    "latitude",
+    "longitude",
+    "heading",
+    "speed",
+    "last seen"
 ];
 
 
@@ -89,7 +89,7 @@ var render_main = function(req, res, config, dbpool) {
             res.render("flight", {
                 flights: [],
                 header: STAT_HEADER,
-                status: "Cannot establish database connection"
+                status: "cannot establish database connection"
             });
 
             return;
@@ -112,7 +112,7 @@ var render_main = function(req, res, config, dbpool) {
                         flights: rows,
                         header: STAT_HEADER,
                         status: strftime(
-                            "Refreshed at %Y-%m-%d %H:%M:%S", new Date()
+                            "refreshed at %Y-%m-%d %H:%M:%S", new Date()
                         )
                     });
                 };
@@ -122,7 +122,7 @@ var render_main = function(req, res, config, dbpool) {
             res.render("flight", {
                 flights: [],
                 header: STAT_HEADER,
-                status: "Cannot establish database connection"
+                status: "cannot establish database connection"
             });
             return;
         });
@@ -135,7 +135,7 @@ var get_config = function() {
         var config = JSON.parse(fs.readFileSync("config.json"));
     } catch (e) {
         exit(
-            "Cannot parse configuration file: '" + "config.json" + "', " + 
+            "cannot parse configuration file: '" + "config.json" + "', " + 
             "reason: '" + e + "'",
             255
         );
