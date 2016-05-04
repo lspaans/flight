@@ -112,7 +112,7 @@ var render_main = function(req, res, config, dbpool) {
                         flights: rows,
                         header: STAT_HEADER,
                         status: strftime(
-                            "Refreshed at '%Y-%m-%d %H:%M:%S'", new Date()
+                            "Refreshed at %Y-%m-%d %H:%M:%S", new Date()
                         )
                     });
                 };
