@@ -29,9 +29,9 @@ var STAT_HEADER = [
     "Airline",
     "Country",
     "Squawk",
-    "Alt.",
-    "Lat",
-    "Long.",
+    "Altitude",
+    "Latitude",
+    "Longitude",
     "Heading",
     "Speed",
     "Last seen"
