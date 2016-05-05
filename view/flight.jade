@@ -10,12 +10,12 @@ html
       table(class="statTable")
         thead
           tr(class="statHeaderRow")
-            for value in header
-              th(class="statCell")= value
+            for col in columns
+              th(class="statCell")= col.name
         tbody
           for flight in flights
             tr(class="statRow")
-              each val, index in flight
-                td(class="statCell")= val
+              each value, index in flight
+                td(class="statCell")= value + (columns[index].unit || "")
       span(class="statusName")= 'status: '
       span(class="statusValue")= status

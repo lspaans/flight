@@ -9,41 +9,58 @@ var path = require("path");
 var strftime = require("strftime");
 
 var SQL_CURRENT_FLIGHTS = "SELECT " +
-      "fl.flight, " +
-      "al.airline, " +
-      "al.country, " +
-      "LPAD(HEX(fl.squawk), 4, '0'), " +
-      "IF(" +
-          "fl.alt>100 AND fl.alt<1000000 AND fl.speed>0," + 
-          "CONCAT(FORMAT(COALESCE(fl.alt), 0), 'ft.')," +
-          "'n/a'" + 
-      "), " +
-      "CONCAT(FORMAT(COALESCE(fl.lat), 5), '˚'), " +
-      "CONCAT(FORMAT(COALESCE(fl.lon), 5), '˚')," +
-      "CONCAT(COALESCE(fl.heading), '˚'), " +
-      "IF(" +
-          "fl.alt>100 AND fl.alt<1000000 AND fl.speed>0," + 
-          "CONCAT(COALESCE(fl.speed), 'kt.'), " +
-          "'n/a'" + 
-      "), " +
-      "DATE_FORMAT(fl.last_update, '%Y-%m-%d %T') " +
+      "fl.flight AS call_sign, " +
+      "COALESCE(al.airline, 'n/a') AS airline, " +
+      "COALESCE(al.country, 'n/a') AS country, " +
+      "LPAD(HEX(fl.squawk), 4, '0') AS squawk, " +
+      "COALESCE(fl.alt, 0) AS altitude," +
+      "COALESCE(fl.lat, 0) AS latitude, " +
+      "COALESCE(fl.lon, 0) AS longitude," +
+      "COALESCE(fl.heading, 0) AS heading, " +
+      "COALESCE(fl.speed, 0) AS speed, " +
+      "DATE_FORMAT(fl.last_update, '%Y-%m-%d %T') AS last_seen " +
   "FROM flights fl " +
   "JOIN airlines al ON al.icao = fl.airline " +
   "WHERE last_update > NOW() - INTERVAL ? SECOND " + 
   "GROUP BY fl.flight";
 
-var STAT_HEADER = [
-    "call sign",
-    "airline",
-    "country",
-    "squawk",
-    "altitude",
-    "latitude",
-    "longitude",
-    "heading",
-    "speed",
-    "last seen"
-];
+var COLUMNS = {
+    "call_sign": {
+        "name": "call sign"
+    },
+    "airline": {
+        "name": "airline"
+    },
+    "country": {
+        "name": "country"
+    },
+    "squawk": {
+        "name": "squawk"
+    },
+    "altitude": {
+        "name": "altitude",
+        "unit": "ft."
+    },
+    "latitude": {
+        "name": "latitude",
+        "unit": "˚"
+    },
+    "longitude": {
+        "name": "longitude",
+        "unit": "˚"
+    },
+    "heading": {
+        "name": "heading",
+        "unit": "˚"
+    },
+    "speed": {
+        "name": "speed",
+        "unit": "kt."
+    },
+    "last_seen": {
+        "name": "last seen"
+    }
+};
 
 
 var exit = function(message, code) {
@@ -96,7 +113,7 @@ var render_main = function(req, res, config, dbpool) {
 
             res.render("flight", {
                 flights: [],
-                header: STAT_HEADER,
+                columns: COLUMNS,
                 status: "cannot establish database connection"
             });
 
@@ -118,7 +135,7 @@ var render_main = function(req, res, config, dbpool) {
                 if (!err) {
                     res.render("flight", {
                         flights: rows,
-                        header: STAT_HEADER,
+                        columns: COLUMNS,
                         status: strftime(
                             "refreshed at %Y-%m-%d %H:%M:%S", new Date()
                         )
@@ -129,7 +146,7 @@ var render_main = function(req, res, config, dbpool) {
         dbconn.on("error", function(err) {
             res.render("flight", {
                 flights: [],
-                header: STAT_HEADER,
+                columns: COLUMNS,
                 status: "cannot establish database connection"
             });
             return;
