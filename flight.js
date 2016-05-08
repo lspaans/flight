@@ -18,7 +18,7 @@ var SQL_CURRENT_FLIGHTS = "SELECT " +
       "COALESCE(fl.lon, 0) AS longitude," +
       "COALESCE(fl.heading, 0) AS heading, " +
       "COALESCE(fl.speed, 0) AS speed, " +
-      "DATE_FORMAT(fl.last_update, '%Y-%m-%d %T') AS last_seen " +
+      "TIMESTAMPDIFF(SECOND, fl.last_update, NOW()) AS last_seen " +
   "FROM flights fl " +
   "JOIN airlines al ON al.icao = fl.airline " +
   "WHERE last_update > NOW() - INTERVAL ? SECOND " + 
@@ -58,7 +58,8 @@ var COLUMNS = {
         "unit": "kt."
     },
     "last_seen": {
-        "name": "last seen"
+        "name": "last seen",
+        "unit": "s."
     }
 };
 
